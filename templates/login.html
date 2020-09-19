@@ -26,6 +26,15 @@
                 formdata.append("image", file);
                 let xhr = new XMLHttpRequest();
                 xhr.open('POST', 'http://localhost:5000/check', true);
+                xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 4) {
+                            var data=xhr.responseText;
+                            var jsonResponse = JSON.parse(data);
+                            var name = jsonResponse["name"];
+                            var score = jsonResponse["confidence"];
+                            window.location.replace("http://127.0.0.1:5000/loggedin/"+name+"/"+score);
+                        }
+                    };
                 xhr.send(formdata);
             }
 
