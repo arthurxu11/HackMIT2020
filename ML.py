@@ -1,8 +1,10 @@
-import json, time
+import json, time, shutil
 from ibm_watson import VisualRecognitionV3
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from flask import Flask, render_template, request
 from PIL import Image
+import numpy as np
+import cv2
 
 # IBM Watson Auth
 authenticator = IAMAuthenticator('3gA07UmUh08PnJgMhVJ4dMfrzCXPnzerpHaTo32UNRvT')
@@ -24,12 +26,15 @@ def signup():
 def login():
     return '<h1>Login here</h1>'
 
-@app.route('/auth', methods=['POST'])
-def auth():
-    imagefile = request.files.get('imagefile', '')
-    name = "Card"+str(time.time())
-    im1 = imagefile.save(name)
-
+@app.route('/add', methods=['POST'])
+def add():
+    imagefile = request.files
+    print(type(imagefile))
+    for x in range(1, 11):
+        print(x)
+        name = "Card" + str(time.time())+str(x)+".jpg"
+        im1 = imagefile.save(name)
+        shutil.move(name, "./images")
     return "Beans"
 
 @app.route('/loggedin')

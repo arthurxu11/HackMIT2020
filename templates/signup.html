@@ -45,9 +45,9 @@
         $("#snap").click(function(){
             var context = canvas.getContext('2d');
             data = context
-            $.post("/auth", function(data, status){
+            $.post("/add", function(data, status){
                 alert("Data: " + data + "\nStatus: " + status);
-            });
+            }, "image/jpeg");
         });
     </script>
 
