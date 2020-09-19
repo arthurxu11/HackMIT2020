@@ -1,7 +1,9 @@
 import json, time, shutil
 from ibm_watson import VisualRecognitionV3
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
-from flask import Flask, render_template, request, redirect, session, url_for
+from flask import Flask, render_template, request, redirect, session, url_for, make_response
+from flask_session import Session
+from flask_cors import CORS
 from PIL import Image
 import numpy as np
 import cv2, io, os
@@ -16,7 +18,8 @@ app = Flask(__name__)
 app.config["DEBUG"] = True
 app.config["ALLOWED_IMAGE_EXTENSIONS"] = ["JPEG", "JPG", "PNG"]
 app.config["IMAGE_UPLOADS"] = './images'
-app.config['SECRET_KEY'] = 'Test123'
+app.config['SECRET_KEY'] = b'fL\xabV\x85\x11\x90\x81\x84\xe0\xa7\xf1\xc7\xd5\xf6\xec\x8f\xd1\xc0\xa4\xee)z\xf0'
+CORS(app)
 
 @app.route('/')
 def home():
@@ -28,16 +31,13 @@ def signup():
 
 @app.route('/add', methods=['POST'])
 def add():
-    print(request.files)
-    if request.method == 'POST' and 'photo' in request.files:
-        print("Test")
-        photo = request.files['photo']
-        in_memory_file = io.BytesIO()
-        photo.save(in_memory_file)
-        data = np.fromstring(in_memory_file.getvalue(), dtype=np.uint8)
-        color_image_flag = 1
-        img = cv2.imdecode(data, color_image_flag)
-        im1 = img.save("Test.jpg")
+    if request.method == "POST":
+
+        if request.files:
+            image = request.files["image"]
+
+            name = image.filename[:-4]+str(time.time())+".jpg"
+            image.save(os.path.join(app.config["IMAGE_UPLOADS"], name))
 
     # imagefile = request.files
     # print(type(imagefile))
@@ -52,40 +52,52 @@ def add():
 def login():
     return render_template('login.html')
 
-@app.route('/check', methods=["POST"])
+@app.route('/check', methods=["POST", "GET"])
 def check():
     if request.method == "POST":
-
         if request.files:
+            print(session.get('guess'))
             image = request.files["image"]
-
-            name = image.filename[:-4]+str(time.time())+".jpg"
-            image.save(os.path.join(app.config["IMAGE_UPLOADS"], name))
-            print("2")
-            with open("./images/"+name, 'rb') as images_file:
-                classes = visual_recognition.classify(images_file=images_file, classifier_ids=['cards_176556607']).get_result()
-                guesses = classes['images'][0]['classifiers'][0]['classes']
-                max = 0
-                topguess = ""
-                for x in guesses:
-                    guess = x['class']
-                    score = x['score']
-                    if score > max:
-                        topguess = guess
-                        max = score
-
-    # messages = json.dumps({"topguess": topguess, "confidence": str(score)})
-    # session['messages'] = messages
-    messages = [topguess, max]
+            session['guess'] = "Arthur Xu"
+            print(session.get('guess'))
+            res = make_response()
+            res.set_cookie('somecookiename', 'I am cookie')
+            return "OK"
+            # name = image.filename[:-4]+str(time.time())+".jpg"
+            # image.save(os.path.join(app.config["IMAGE_UPLOADS"], name))
+            # with open("./images/"+name, 'rb') as images_file:
+            #     classes = visual_recognition.classify(images_file=images_file, classifier_ids=['cards_176556607']).get_result()
+            #     guesses = classes['images'][0]['classifiers'][0]['classes']
+            #     max = 0
+            #     topguess = ""
+            #     for x in guesses:
+            #         guess = x['class']
+            #         score = x['score']
+            #         if score > max:
+            #             topguess = guess
+            #             max = score
+            # print(topguess, max)
+            # messages = json.dumps({"topguess": topguess, "confidence": str(score)})
+            # session['messages'] = messages
+            # print(session['messages'])
+            # return "OK"
     # return redirect(url_for('loggedin', messages=[topguess, max]))
-    return render_template("loggedin.html", messages=messages)
 
 @app.route('/loggedin')
-def loggedin(messages):
+def loggedin():
     # messages = request.args['messages']  # counterpart for url_for()
     # messages = session['messages']
     # print(messages)# counterpart for session
-    return render_template("loggedin.html", messages=messages)
+    print(request.cookies.get('somecookiename'))
+
+    print(session)
+    print(session.get('guess'))
+    if "data" in session:
+        topguess = json.loads(session['data'])
+        return render_template("loggedin.html", messages = topguess)
+    else:
+        return redirect(url_for("login"))
+
 # with open('./beagle.zip', 'rb') as beagle, open(
 #         './golden-retriever.zip', 'rb') as goldenretriever, open(
 #             './husky.zip', 'rb') as husky, open(
