@@ -5,6 +5,20 @@
     <title>Title</title>
 </head>
 <body>
-    <h1>Welcome {{ messages[0] }}! You had a confidence score of {{ messages[1] }} </h1>
+    <h1 id="greeting"></h1>
+    <script>
+        var name = sessionStorage.getItem("name")
+        if (name == null) {
+            window.location.replace("http://127.0.0.1:5000/login");
+        } else {
+            var confidence = sessionStorage.getItem("confidence")
+            if (confidence == null) {
+                window.location.replace("http://127.0.0.1:5000/login");
+            } else {
+                document.getElementById("greeting").innerHTML = "Welcome "+name+"!"
+            }
+        }
+    </script>
+
 </body>
 </html>

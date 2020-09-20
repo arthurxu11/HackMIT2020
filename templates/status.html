@@ -5,18 +5,6 @@
     <title>Title</title>
 </head>
 <body>
-    <input id = name>
-    <button id="check">Check</button>
-    <h1></h1>
-    <script>
-        check.onclick = function() {
-                name = document.getElementById("name").value
-                var xmlhttp = new XMLHttpRequest();
-                var theUrl = "http://127.0.0.1:5000/status";
-                xmlhttp.open("POST", theUrl);
-                xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-                xmlhttp.send(JSON.stringify({"name": name}));
-        }
-    </script>
+    <h1 id="status">The model is currently {{ status }}!</h1>
 </body>
 </html>

@@ -1,16 +1,16 @@
 import json, time, shutil, cv2, io, os, math, shutil
 from ibm_watson import VisualRecognitionV3
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
-from flask import Flask, render_template, request, redirect, session, url_for, make_response, jsonify
+from flask import Flask, render_template, request, redirect, session, url_for, make_response, jsonify, flash
 from flask_session import Session
 from flask_cors import CORS
 from PIL import Image
 import numpy as np
 
-# IBM Watson Auth
-authenticator = IAMAuthenticator('3gA07UmUh08PnJgMhVJ4dMfrzCXPnzerpHaTo32UNRvT')
+#IBM Watson Auth
+authenticator = IAMAuthenticator('P27A7uRN6YOLCrpxpBhQMrWz0Xhk-RWdhzO0LVcmKY6g')
 visual_recognition = VisualRecognitionV3(version='2018-03-19', authenticator=authenticator)
-visual_recognition.set_service_url('https://api.us-south.visual-recognition.watson.cloud.ibm.com/instances/3d2b99fc-1cc4-4049-a15e-90501534d482')
+visual_recognition.set_service_url('https://api.us-south.visual-recognition.watson.cloud.ibm.com/instances/c436bb25-90e3-40fa-adfa-ebcbc5226a13')
 
 app = Flask(__name__)
 # app.config["DEBUG"] = True
@@ -23,7 +23,6 @@ CORS(app)
 
 @app.route('/')
 def home():
-    print(session.get("guess"))
     return "<h1>Hello World</p>"
 
 @app.route('/signup')
@@ -51,8 +50,10 @@ def add():
             shutil.make_archive(userfolder, 'zip', "./images/"+userfolder)
             shutil.move(userfolder+".zip", "./images/"+userfolder)
             with open("./images/"+userfolder+"/"+userfolder+".zip", 'rb') as card:
-                updated_model = visual_recognition.update_classifier(classifier_id='cards_176556607', positive_examples={name2: card}).get_result()
+                updated_model = visual_recognition.update_classifier(classifier_id='mycards_1862867737', positive_examples={name2: card}).get_result()
             print(json.dumps(updated_model, indent=2))
+
+    return render_template('signup.html')
 
     # imagefile = request.files
     # print(type(imagefile))
@@ -75,42 +76,45 @@ def check():
             name = image.filename[:-4]+str(time.time())+".jpg"
             image.save(os.path.join(app.config["IMAGE_UPLOADS"], name))
             with open("./images/"+name, 'rb') as images_file:
-                classes = visual_recognition.classify(images_file=images_file, classifier_ids=['cards_176556607']).get_result()
+                classes = visual_recognition.classify(images_file=images_file, classifier_ids=['mycards_1862867737']).get_result()
+                print(classes)
                 guesses = classes['images'][0]['classifiers'][0]['classes']
                 max = 0
                 topguess = ""
                 for x in guesses:
                     guess = x['class']
                     score = x['score']
+                    print(guess, score)
                     if score > max:
                         topguess = guess
                         max = score
-                os.remove(images_file)
+            if max <= 0.75:
+                return redirect(url_for('login'))
             name = topguess
             name.replace(" ", "_")
             data = {'name': name, "confidence": max}
             return jsonify(data)
 
-@app.route('/statuscheck', methods=["GET"])
+@app.route('/status', methods=["GET"])
 def statuscheck():
-    return render_template("status.html")
-
-@app.route('/status', methods=["POST"])
-def status():
-    content = request.json
-    name = content['name']
-    classifier = visual_recognition.get_classifier(classifier_id='cards_176556607').get_result()
+    classifier = visual_recognition.get_classifier(classifier_id='mycards_1862867737').get_result()
     status = classifier['status']
-    print(status)
+    if status == "ready":
+        status = "Ready"
+    elif status == "training" or status =="retraining":
+        status = "Training"
+    else:
+        status = "Error"
+    return render_template("status.html", status = status)
 
-@app.route('/loggedin/<usr>/<score>')
-def loggedin(usr, score):
-    print(usr, score)
-    usr = usr.replace("_", " ")
+@app.route('/loggedin')
+def loggedin():
+    # print(usr, score)
+    # usr = usr.replace("_", " ")
     # print(session['guess'])
     # if "data" in session:
     # topguess = json.loads(session['data'])
-    return render_template("loggedin.html", messages=[usr, score])
+    return render_template("loggedin.html")
     # else:
     #     return redirect(url_for("login"))
 
