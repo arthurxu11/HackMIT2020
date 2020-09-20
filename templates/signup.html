@@ -1,42 +1,61 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
-    <title>Signup!</title>
-
-    <style>
-    #container {
-        margin: 0px auto;
-        width: 500px;
-        height: 375px;
-        border: 10px #333 solid;
-    }
-    #videoElement {
-        width: 500px;
-        height: 375px;
-        background-color: #666;
-    }
-    </style>
-    <script src="jquery-3.5.1.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>CardIn</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/Footer-Basic.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.2.0/aos.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/Navigation-Clean.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/Projects-Horizontal.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/styles.css') }}">
 </head>
 
 <body>
-
-        <form action="/add" method="POST" enctype="multipart/form-data">
-            <div class="form-group">
-              <label>Select image</label>
-              <div class="custom-file">
-                  <input type="text" class="custom-file-input" name="name" id="name">
-                  <label class="custom-file-label" for="name">Enter Name</label>
-                <input type="file" class="custom-file-input" name="file[]" id="image" accept="image/x-png,image/gif,image/jpeg,image/jpg" multiple="">
-                <label class="custom-file-label" for="image">Select image...</label>
-              </div>
+    <nav class="navbar navbar-light navbar-expand-md navigation-clean" style="width: 100%;">
+        <div class="container"><a class="navbar-brand" href="/">CardIn</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse"
+                id="navcol-1">
+                <ul class="nav navbar-nav ml-auto">
+                    <li class="nav-item" role="presentation"><a class="nav-link active" href="/signup">Sign Up</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="/login">Sign In</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="/status">Status</a></li>
+                </ul>
             </div>
-
-            <button type="submit" class="btn btn-primary">Upload</button>
+        </div>
+    </nav>
+    <div>
+        <form action="/add" method="POST" enctype="multipart/form-data" style="margin-left: auto;margin-right: auto;text-align: center;margin-top: 50px;">
+            <div id="form-group"><input id="name" name="name" placeholder="Enter name">
+                <input type="file" id="image" name="file[]" accept="image/x-png,image/gif,image/jpeg,image/jpg" multiple="">
+            </div>
+            <button
+                class="btn btn-primary btn btn-primary" type="submit" style="color: white;background-color: black;border-color: black;margin-top: 10px;">Submit</button>
         </form>
-
+    </div>
+    <div style="text-align: center;margin-top: 100px;">
+        <h1>How to use<br><br>1) Enter your full name into the text area<br><br>2) Select the pictures of your card. Use at least three pictures in various lighting conditions. Crop the pictures to the edge of the card.<br><br>3) Once you submit, you will
+            be redirected to the status page. If it is training, the website is training your card. It will take up to 10 minutes to train.</h1>
+    </div>
+    <div class="footer-basic" style="bottom: 0px;position: static;width: 100%;margin-top: 50px;">
+        <footer>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="/">Home</a></li>
+                <li class="list-inline-item"><a href="/signup">Sign Up</a></li>
+                <li class="list-inline-item"><a href="/login">Sign In</a></li>
+                <li class="list-inline-item"><a href="/status">Status</a></li>
+            </ul>
+            <p class="copyright">Built at HackMIT 2020. Arthur Xu</p>
+        </footer>
+    </div>
+        <script type=text/javascript src="{{url_for('static', filename='assets/js/jquery.min.js') }}"></script>
+        <script type=text/javascript src="{{url_for('static', filename='assets/bootstrap/js/bootstrap.min.js') }}"></script>
+        <script type=text/javascript src="{{url_for('static', filename='assets/js/bs-init.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.2.0/aos.js"></script>
 </body>
+
 </html>

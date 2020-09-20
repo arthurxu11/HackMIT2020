@@ -2,10 +2,7 @@ import json, time, shutil, cv2, io, os, math, shutil
 from ibm_watson import VisualRecognitionV3
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from flask import Flask, render_template, request, redirect, session, url_for, make_response, jsonify, flash
-from flask_session import Session
 from flask_cors import CORS
-from PIL import Image
-import numpy as np
 
 #IBM Watson Auth
 authenticator = IAMAuthenticator('P27A7uRN6YOLCrpxpBhQMrWz0Xhk-RWdhzO0LVcmKY6g')
@@ -23,7 +20,7 @@ CORS(app)
 
 @app.route('/')
 def home():
-    return "<h1>Hello World</p>"
+    return render_template("index.html")
 
 @app.route('/signup')
 def signup():
@@ -36,7 +33,6 @@ def add():
             name = request.form['name'].replace(" ", "_")
             name2 = request.form['name']
             userfolder = str(name)+"images"
-            print(userfolder)
             path = os.path.join("./images", userfolder)
             os.mkdir(path)
             uploaded_files = request.files.getlist("file[]")
@@ -51,10 +47,7 @@ def add():
             shutil.move(userfolder+".zip", "./images/"+userfolder)
             with open("./images/"+userfolder+"/"+userfolder+".zip", 'rb') as card:
                 updated_model = visual_recognition.update_classifier(classifier_id='mycards_1862867737', positive_examples={name2: card}).get_result()
-            print(json.dumps(updated_model, indent=2))
-
-    return render_template('signup.html')
-
+    return redirect(url_for('status'))
     # imagefile = request.files
     # print(type(imagefile))
     # for x in range(1, 11):
@@ -77,14 +70,12 @@ def check():
             image.save(os.path.join(app.config["IMAGE_UPLOADS"], name))
             with open("./images/"+name, 'rb') as images_file:
                 classes = visual_recognition.classify(images_file=images_file, classifier_ids=['mycards_1862867737']).get_result()
-                print(classes)
                 guesses = classes['images'][0]['classifiers'][0]['classes']
                 max = 0
                 topguess = ""
                 for x in guesses:
                     guess = x['class']
                     score = x['score']
-                    print(guess, score)
                     if score > max:
                         topguess = guess
                         max = score
@@ -96,15 +87,15 @@ def check():
             return jsonify(data)
 
 @app.route('/status', methods=["GET"])
-def statuscheck():
+def status():
     classifier = visual_recognition.get_classifier(classifier_id='mycards_1862867737').get_result()
     status = classifier['status']
     if status == "ready":
-        status = "Ready"
+        status = "is ready to use"
     elif status == "training" or status =="retraining":
-        status = "Training"
+        status = "is currently training"
     else:
-        status = "Error"
+        status = "has an error"
     return render_template("status.html", status = status)
 
 @app.route('/loggedin')

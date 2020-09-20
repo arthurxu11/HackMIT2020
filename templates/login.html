@@ -1,16 +1,36 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
-    <title>Log In</title>
-    <script src="jquery-3.5.1.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>CardIn</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/Footer-Basic.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.2.0/aos.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/Navigation-Clean.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/Projects-Horizontal.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/styles.css') }}">
 </head>
 
 <body>
-<!--    <form action="/add" method="POST" enctype="multipart/form-data">-->
-        <video id="myVideo" autoplay></video>
-
+    <nav class="navbar navbar-light navbar-expand-md navigation-clean" style="width: 100%;">
+        <div class="container"><a class="navbar-brand" href="/">CardIn</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse"
+                id="navcol-1">
+                <ul class="nav navbar-nav ml-auto">
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="/signup">Sign Up</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link active" href="/login">Sign In</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="/status">Status</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div style="height: 1400px;">
+        <h1 style="text-align: center;font-size: 50px;margin-top: 50px;">Click anywhere to take the picture</h1>
+        <video id="myVideo" autoplay width="1280" height="720" style="width: 100%;"></video>
         <script>
 
             let v = document.getElementById("myVideo");
@@ -31,7 +51,7 @@
                             var jsonResponse = JSON.parse(data);
                             sessionStorage.name = jsonResponse["name"];
                             sessionStorage.confidence = jsonResponse["confidence"];
-                            window.location.replace("http://127.0.0.1:5000/loggedin");
+                            window.location.replace("/loggedin");
                         }
                     };
                 xhr.send(formdata);
@@ -70,6 +90,24 @@
             };
 
         </script>
-
+        <h1 style="text-align: center;">How to use<br><br>1) Align your student ID in the camera frame. Make sure it takes up as much camera space as possible and is adequately lit to get the best results<br><br>2) Click anywhere in on the page. It will take a picture<br><br>3) You
+            will either be redirected to a page if successful. If not, try again.</h1>
+    </div>
+    <div class="footer-basic" style="bottom: 0px;position: static;width: 100%;margin-top: 50px;">
+        <footer>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="/">Home</a></li>
+                <li class="list-inline-item"><a href="/signup">Sign Up</a></li>
+                <li class="list-inline-item"><a href="/login">Sign In</a></li>
+                <li class="list-inline-item"><a href="/status">Status</a></li>
+            </ul>
+            <p class="copyright">Built at HackMIT 2020. Arthur Xu</p>
+        </footer>
+    </div>
+        <script type=text/javascript src="{{url_for('static', filename='assets/js/jquery.min.js') }}"></script>
+        <script type=text/javascript src="{{url_for('static', filename='assets/bootstrap/js/bootstrap.min.js') }}"></script>
+        <script type=text/javascript src="{{url_for('static', filename='assets/js/bs-init.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.2.0/aos.js"></script>
 </body>
+
 </html>

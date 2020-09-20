@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Log In</title>
+    <script src="jquery-3.5.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+<!--    <form action="/add" method="POST" enctype="multipart/form-data">-->
+        <video id="myVideo" autoplay></video>
+
+        <script>
+
+            let v = document.getElementById("myVideo");
+
+            //create a canvas to grab an image for upload
+            let imageCanvas = document.createElement('canvas');
+            let imageCtx = imageCanvas.getContext("2d");
+
+            //Add file blob to a form and post
+            function postFile(file) {
+                let formdata = new FormData();
+                formdata.append("image", file);
+                let xhr = new XMLHttpRequest();
+                xhr.open('POST', 'http://localhost:5000/check', true);
+                xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 4) {
+                            var data=xhr.responseText;
+                            var jsonResponse = JSON.parse(data);
+                            sessionStorage.name = jsonResponse["name"];
+                            sessionStorage.confidence = jsonResponse["confidence"];
+                            window.location.replace("http://127.0.0.1:5000/loggedin");
+                        }
+                    };
+                xhr.send(formdata);
+            }
+
+            //Get the image from the canvas
+            function sendImagefromCanvas() {
+
+                //Make sure the canvas is set to the current video size
+                imageCanvas.width = v.videoWidth;
+                imageCanvas.height = v.videoHeight;
+
+                imageCtx.drawImage(v, 0, 0, v.videoWidth, v.videoHeight);
+
+                //Convert the canvas to blob and post the file
+                imageCanvas.toBlob(postFile, 'image/jpeg');
+            }
+
+            //Take a picture on click
+            v.onclick = function() {
+                console.log('click');
+                sendImagefromCanvas();
+            };
+
+            window.onload = function () {
+
+                //Get camera video
+                navigator.mediaDevices.getUserMedia({video: {width: 1280, height: 720}, audio: false})
+                    .then(stream => {
+                        v.srcObject = stream;
+                    })
+                    .catch(err => {
+                        console.log('navigator.getUserMedia error: ', err)
+                    });
+
+            };
+
+        </script>
+
+</body>
+</html>

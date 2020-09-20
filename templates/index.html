@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>CardIn</title>
+<!--    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+<!--    <link rel="stylesheet" href="assets/css/Footer-Basic.css">-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/Footer-Basic.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.2.0/aos.css">
+<!--    <link rel="stylesheet" href="assets/css/Navigation-Clean.css">-->
+<!--    <link rel="stylesheet" href="assets/css/Projects-Horizontal.css">-->
+<!--    <link rel="stylesheet" href="assets/css/styles.css">-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/Navigation-Clean.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/Projects-Horizontal.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/styles.css') }}">
+</head>
+
+<body>
+    <div id="logo" style="height: 200px;">
+        <h1 class="pulse animated" style="text-align: center;margin-top: 10%;font-size: 100px;">CardIn</h1>
+        <h1 class="pulse animated" style="text-align: center;margin-top: 3%;">A new way to sign in for students</h1>
+    </div>
+    <div style="width: 80%;height: 400px;margin-left: auto;margin-right: auto;margin-top: 100px;"><button class="btn btn-primary" type="button" style="width: 50%;height: 100%;background-color: #000;font-size: 24px;opacity: 1;border-color: white;" onclick="location.href = '/signup';">Sign Up</button><button class="btn btn-primary" type="button" style="width: 50%;height: 100%;background-color: #000;font-size: 24px;border-color: white;" onclick="location.href = '/login';">Sign In</button></div>
+    <div
+        id="info" style="text-align: center;margin-top: 15%;">
+        <h1 data-aos="fade-up" data-aos-delay="100">Sign into websites with your Student ID</h1>
+        </div>
+        <div></div>
+        <div class="projects-horizontal" style="margin-top: 10%;margin-bottom: 10%;">
+            <div class="container">
+                <div class="intro">
+                    <h2 class="text-center">Tech Stack</h2>
+                    <p class="text-center"></p>
+                </div>
+                <div class="row projects">
+                    <div class="col-sm-6 item">
+                        <div class="row">
+                            <div class="col-md-12 col-lg-5"><a href="#"><img class="img-fluid" src="{{url_for('static', filename='assets/img/flask-logo.png') }}"></a></div>
+                            <div class="col">
+                                <h3 class="name">Flask</h3>
+                                <p class="description">Python web framework. Used for website.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 item">
+                        <div class="row">
+                            <div class="col-md-12 col-lg-5"><a href="#"><img class="img-fluid" src="{{url_for('static', filename='assets/img/IBC.png.jpeg') }}"></a></div>
+                            <div class="col">
+                                <h3 class="name">IBM Cloud</h3>
+                                <p class="description">IBM Watson Image recognition software used to classify cards.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 item">
+                        <div class="row">
+                            <div class="col-md-12 col-lg-5"><a href="#"><img class="img-fluid" src="{{url_for('static', filename='assets/img/bs4.png') }}" style="height: 100px;"></a></div>
+                            <div class="col">
+                                <h3 class="name">Bootstrap 4</h3>
+                                <p class="description">CSS Framework for website</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 item">
+                        <div class="row">
+                            <div class="col-md-12 col-lg-5"><a href="#"><img class="img-fluid" src="{{url_for('static', filename='assets/img/py.png') }}" style="height: 100px;margin-left: auto;margin-right: auto;"></a></div>
+                            <div class="col">
+                                <h3 class="name">Python</h3>
+                                <p class="description">Backend language</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-basic">
+            <footer>
+                <ul class="list-inline">
+                    <li class="list-inline-item"><a href="/">Home</a></li>
+                    <li class="list-inline-item"><a href="/signup">Sign Up</a></li>
+                    <li class="list-inline-item"><a href="/login">Sign In</a></li>
+                    <li class="list-inline-item"><a href="/status">Status</a></li>
+                </ul>
+                <p class="copyright">Built at HackMIT 2020. Arthur Xu</p>
+            </footer>
+        </div>
+<!--        <script src="assets/js/jquery.min.js"></script>-->
+<!--        <script src="assets/bootstrap/js/bootstrap.min.js"></script>-->
+<!--        <script src="assets/js/bs-init.js"></script>-->
+        <script type=text/javascript src="{{url_for('static', filename='assets/js/jquery.min.js') }}"></script>
+        <script type=text/javascript src="{{url_for('static', filename='assets/bootstrap/js/bootstrap.min.js') }}"></script>
+        <script type=text/javascript src="{{url_for('static', filename='assets/js/bs-init.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.2.0/aos.js"></script>
+</body>
+
+</html>
